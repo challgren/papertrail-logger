@@ -1,0 +1,25 @@
+{
+    "name": "challgren/papertrail-logger",
+    "description": "PapertrailLogger plugin for CakePHP",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4",
+        "cakephp/cakephp": "^4.0",
+        "monolog/monolog": "^2.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PapertrailLogger\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PapertrailLogger\\Test\\": "tests/",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
+        }
+    }
+}
