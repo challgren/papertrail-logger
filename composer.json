@@ -5,7 +5,9 @@
     "license": "MIT",
     "require": {
         "php": ">=7.4",
-        "cakephp/cakephp": "^4.0",
+        "cakephp/console": "^4.0",
+        "cakephp/core": "^4.0",
+        "cakephp/i18n": "^4.0",
         "monolog/monolog": "^2.2"
     },
     "require-dev": {
