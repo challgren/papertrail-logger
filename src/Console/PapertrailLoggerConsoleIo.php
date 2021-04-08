@@ -33,10 +33,15 @@ class PapertrailLoggerConsoleIo extends ConsoleIo
         ?ConsoleOutput $err = null,
         ?ConsoleInput $in = null,
         ?HelperRegistry $helpers = null
-    ) {
+    )
+    {
         parent::__construct($out, $err, $in, $helpers);
 
-        if (!Configure::read('debug')) {
+        if (
+            !Configure::read('debug')
+            && Configure::read('papertrail.host', getenv('PAPERTRAIL_HOST'))
+            && Configure::read('papertrail.port', getenv('PAPERTRAIL_PORT'))
+        ) {
             $formatter = new LineFormatter('[%datetime%] %channel%.%level_name%: %message%', 'Y-m-d H:i:s.v');
 
             $this->_log = new Logger(strval(Configure::read('papertrail.console.channel', 'cakephp')));
