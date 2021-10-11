@@ -31,7 +31,7 @@ class Plugin extends BasePlugin
     {
         if (
             !Configure::read('debug')
-            && Configure::read('papertrail.host', getenv('PAPERTRAIL_HOST'))
+            && Configure::read('papertrail.host', getenv('PAPERTRAIL_HOST') ?? getenv('PAPERTRAIL_URL'))
             && Configure::read('papertrail.port', getenv('PAPERTRAIL_PORT'))
         ) {
             Log::setConfig('default', function () {
@@ -40,7 +40,7 @@ class Plugin extends BasePlugin
 
                 $log = new Logger(strval(Configure::read('papertrail.channel', 'cakephp')));
                 $sysLog = new SyslogUdpHandler(
-                    strval(Configure::read('papertrail.host', getenv('PAPERTRAIL_HOST'))),
+                    strval(Configure::read('papertrail.host', getenv('PAPERTRAIL_HOST') ?? getenv('PAPERTRAIL_URL'))),
                     intval(Configure::read('papertrail.port', getenv('PAPERTRAIL_PORT'))),
                     LOG_USER,
                     Logger::DEBUG,
