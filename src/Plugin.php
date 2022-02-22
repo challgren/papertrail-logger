@@ -5,8 +5,6 @@ namespace PapertrailLogger;
 
 use Cake\Core\BasePlugin;
 use Cake\Core\PluginApplicationInterface;
-use Cake\Http\MiddlewareQueue;
-use Cake\Routing\RouteBuilder;
 use Cake\Core\Configure;
 use Cake\Log\Log;
 use Monolog\Formatter\LineFormatter;
@@ -31,8 +29,8 @@ class Plugin extends BasePlugin
     {
         if (
             !Configure::read('debug')
-            && Configure::read('papertrail.host', getenv('PAPERTRAIL_HOST') ?? getenv('PAPERTRAIL_URL'))
-            && Configure::read('papertrail.port', getenv('PAPERTRAIL_PORT'))
+            && Configure::read('papertrail.host', env('PAPERTRAIL_HOST') ?? env('PAPERTRAIL_URL'))
+            && Configure::read('papertrail.port', env('PAPERTRAIL_PORT'))
         ) {
             Log::setConfig('default', function () {
                 $output = "%level_name%  %message%";
@@ -40,12 +38,12 @@ class Plugin extends BasePlugin
 
                 $log = new Logger(strval(Configure::read('papertrail.channel', 'cakephp')));
                 $sysLog = new SyslogUdpHandler(
-                    strval(Configure::read('papertrail.host', getenv('PAPERTRAIL_HOST') ?? getenv('PAPERTRAIL_URL'))),
-                    intval(Configure::read('papertrail.port', getenv('PAPERTRAIL_PORT'))),
+                    strval(Configure::read('papertrail.host', env('PAPERTRAIL_HOST') ?? env('PAPERTRAIL_URL'))),
+                    intval(Configure::read('papertrail.port', env('PAPERTRAIL_PORT'))),
                     LOG_USER,
                     Logger::DEBUG,
                     true,
-                    strval(Configure::read('papertrail.channel', 'ident'))
+                    strval(Configure::read('papertrail.ident', 'ident'))
                 );
                 $sysLog->setFormatter($formatter);
                 $log->pushHandler($sysLog);
@@ -58,41 +56,5 @@ class Plugin extends BasePlugin
                 Log::drop('error');
             }
         }
-    }
-
-    /**
-     * Add routes for the plugin.
-     *
-     * If your plugin has many routes and you would like to isolate them into a separate file,
-     * you can create `$plugin/config/routes.php` and delete this method.
-     *
-     * @param \Cake\Routing\RouteBuilder $routes The route builder to update.
-     * @return void
-     */
-    public function routes(RouteBuilder $routes): void
-    {
-        $routes->plugin(
-            'PaperTrailLogger',
-            ['path' => '/paper-trail-logger'],
-            function (RouteBuilder $builder) {
-                // Add custom routes here
-
-                $builder->fallbacks();
-            }
-        );
-        parent::routes($routes);
-    }
-
-    /**
-     * Add middleware for the plugin.
-     *
-     * @param \Cake\Http\MiddlewareQueue $middlewareQueue The middleware queue to update.
-     * @return \Cake\Http\MiddlewareQueue
-     */
-    public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
-    {
-        // Add your middlewares here
-
-        return $middlewareQueue;
     }
 }
