@@ -33,8 +33,7 @@ class Plugin extends BasePlugin
             && Configure::read('papertrail.port', env('PAPERTRAIL_PORT'))
         ) {
             Log::setConfig('default', function () {
-                $output = "%level_name%  %message%";
-                $formatter = new LineFormatter($output, 'Y-m-d H:i:s.v');
+                $formatter = new LineFormatter('[%datetime%] %channel%.%level_name%: %message%', 'Y-m-d H:i:s.v');
 
                 $log = new Logger(strval(Configure::read('papertrail.channel', 'cakephp')));
                 $sysLog = new SyslogUdpHandler(
